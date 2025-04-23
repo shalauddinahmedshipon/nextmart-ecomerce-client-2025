@@ -13,6 +13,10 @@ const RegisterForm = () => {
   const form = useForm({
     resolver:zodResolver(registrationSchema)
   });
+
+ const password = form.watch('password');
+ const passwordConfirm=form.watch('passwordConfirm'); 
+
 const onSubmit:SubmitHandler<FieldValues> =(data)=>{
  console.log(data);
   }
@@ -77,13 +81,19 @@ const onSubmit:SubmitHandler<FieldValues> =(data)=>{
               <FormControl>
                 <Input type="password" {...field} value={field.value || ""} />
               </FormControl>
-
-              <FormMessage/> 
+{
+  passwordConfirm&&password!==passwordConfirm ?
+<FormMessage>Password does not match</FormMessage>
+  :
+  <FormMessage/> 
+}
+            
             </FormItem>
           )}
         />
 
         <Button
+          disabled={passwordConfirm!=="" && password !== passwordConfirm}
           type="submit"
           className="mt-5 w-full"
         >
