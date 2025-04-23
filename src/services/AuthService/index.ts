@@ -1,5 +1,7 @@
 "use server"
 
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form"
 
 export const registerUser =async(userData:FieldValues)=>{
@@ -11,7 +13,12 @@ try {
     },
     body:JSON.stringify(userData)
   })
-  return res.json();
+  const result = await res.json();
+  if(result.success){
+    const storeCookies = await cookies()
+    storeCookies.set("accessToken",result.data.accessToken);
+  }
+  return result;
 } catch (error:any) {
   return Error(error)
 }
@@ -26,8 +33,25 @@ try {
     },
     body:JSON.stringify(userData)
   })
-  return res.json();
+  const result = await res.json();
+  if(result.success){
+    const storeCookies = await cookies()
+    storeCookies.set("accessToken",result.data.accessToken);
+  }
+  return result;
 } catch (error:any) {
   return Error(error)
 }
+}
+
+export const getCurrentUser =async()=>{
+  const storeCookies = await cookies();
+  const accessToken = storeCookies.get("accessToken")?.value
+  let decodedData = null;
+  if(accessToken){
+    decodedData = await jwtDecode(accessToken);
+    return decodedData;
+  }else{
+    return null
+  }
 }
