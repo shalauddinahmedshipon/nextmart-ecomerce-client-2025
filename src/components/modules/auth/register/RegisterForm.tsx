@@ -8,6 +8,8 @@ import Link from 'next/link';
 import React from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { registrationSchema } from './registerValidation';
+import { registerUser } from '@/services/AuthService';
+import { toast } from 'sonner';
 
 const RegisterForm = () => {
   const form = useForm({
@@ -17,8 +19,17 @@ const RegisterForm = () => {
  const password = form.watch('password');
  const passwordConfirm=form.watch('passwordConfirm'); 
 
-const onSubmit:SubmitHandler<FieldValues> =(data)=>{
- console.log(data);
+const onSubmit:SubmitHandler<FieldValues> =async(data)=>{
+try {
+  const res = await registerUser(data);
+if(res?.success){
+  toast.success(res.message)
+}else{
+  toast.error(res.message)
+}
+} catch (error) {
+  console.log(error)
+}
   }
   return (
     <div className="border shadow-xl my-16 border-gray-300 rounded-xl flex-grow max-w-sm w-full p-5 h-auto">
@@ -97,7 +108,10 @@ const onSubmit:SubmitHandler<FieldValues> =(data)=>{
           type="submit"
           className="mt-5 w-full"
         >
-        Register
+          {
+            form.formState.isSubmitting? "Registering...":" Register"
+          }
+       
         </Button>
       </form>
     </Form>
