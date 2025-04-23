@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 import Logo from '@/app/assets/svgs/Logo';
 import { Button } from '@/components/ui/button';
@@ -10,12 +11,16 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { loginSchema } from './loginValidation';
 import { loginUser } from '@/services/AuthService';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const LoginForm = () => {
   const form = useForm({
     resolver:zodResolver(loginSchema)
   });
 
+const handleReChaptCha=(value)=>{
+  console.log(value)
+}
 
 const onSubmit:SubmitHandler<FieldValues> =async(data)=>{
 try {
@@ -69,11 +74,16 @@ if(res?.success){
           )}
         />
        
-
+<div className='flex w-full justify-center '>
+<ReCAPTCHA
+    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY!}
+    onChange={handleReChaptCha}
+  />
+</div>
 
         <Button
           type="submit"
-          className="mt-5 w-full"
+          className=" w-full"
         >
           {
             form.formState.isSubmitting? "Logging...":" Login"
