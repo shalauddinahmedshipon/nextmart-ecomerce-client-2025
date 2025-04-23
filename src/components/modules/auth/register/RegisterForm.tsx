@@ -3,17 +3,21 @@ import Logo from '@/app/assets/svgs/Logo';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl,FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { registrationSchema } from './registerValidation';
 
 const RegisterForm = () => {
-  const form = useForm();
-const onSubmit =(data)=>{
+  const form = useForm({
+    resolver:zodResolver(registrationSchema)
+  });
+const onSubmit:SubmitHandler<FieldValues> =(data)=>{
  console.log(data);
   }
   return (
-    <div className="border-2 mt-16 border-gray-300 rounded-xl flex-grow max-w-md w-full p-5 max-h-[420px]">
+    <div className="border shadow-xl my-16 border-gray-300 rounded-xl flex-grow max-w-sm w-full p-5 h-auto">
     <div className="flex items-center space-x-4 ">
       <Logo />
       <div>
@@ -24,7 +28,7 @@ const onSubmit =(data)=>{
       </div>
     </div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className='space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="name"
