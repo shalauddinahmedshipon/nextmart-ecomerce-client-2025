@@ -6,20 +6,28 @@ import { Form, FormControl,FormField, FormItem, FormLabel, FormMessage } from '@
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { loginSchema } from './loginValidation';
-import { loginUser } from '@/services/AuthService';
+import { loginUser, reChaptChaTokenVerification } from '@/services/AuthService';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 const LoginForm = () => {
+  const [reChaptChaStatus,setReChaptChaStatus]=useState(false);
   const form = useForm({
     resolver:zodResolver(loginSchema)
   });
 
-const handleReChaptCha=(value)=>{
-  console.log(value)
+const handleReChaptCha=async(value:string|null)=>{
+ try {
+  const res = await reChaptChaTokenVerification(value!);
+  if(res.success){
+    setReChaptChaStatus(true)
+  }
+ } catch (error) {
+  console.log(error)
+ }
 }
 
 const onSubmit:SubmitHandler<FieldValues> =async(data)=>{
@@ -82,6 +90,7 @@ if(res?.success){
 </div>
 
         <Button
+        disabled={reChaptChaStatus?false:true}
           type="submit"
           className=" w-full"
         >
