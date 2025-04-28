@@ -74,3 +74,7 @@ export const reChaptChaTokenVerification=async(token:string)=>{
    return Error(error) 
   }
 }
+
+export const logOut = async()=>{
+  (await cookies()).delete("accessToken")
+}
