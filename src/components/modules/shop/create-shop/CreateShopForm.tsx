@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Logo from "@/app/assets/svgs/Logo";
 import NMImageUploader from "@/components/ui/core/NMImageUploader";
 import { useState } from "react";
-import { createShop } from "@/services/Shop";
+// import { createShop } from "@/services/Shop";
 import { toast } from "sonner";
 import ImagePreviewer from "@/components/ui/core/NMImageUploader/ImagePreviewer";
 
@@ -43,17 +43,18 @@ export default function CreateShopForm() {
     };
 
     try {
-      const formData = new FormData();
-      formData.append("data", JSON.stringify(modifiedData));
-      formData.append("logo", imageFiles[0] as File);
+      console.log(modifiedData)
+      // const formData = new FormData();
+      // formData.append("data", JSON.stringify(modifiedData));
+      // formData.append("logo", imageFiles[0] as File);
 
-      const res = await createShop(formData);
+      // const res = await createShop(formData);
 
-      console.log(res);
+      // console.log(res);
 
-      if (res.success) {
-        toast.success(res.message);
-      }
+      // if (res.success) {
+      //   toast.success(res.message);
+      // }
     } catch (err: any) {
       console.error(err);
     }
