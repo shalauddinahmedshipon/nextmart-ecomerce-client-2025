@@ -12,9 +12,14 @@ import { toast } from 'sonner';
 import { loginSchema } from './loginValidation';
 import { loginUser, reChaptChaTokenVerification } from '@/services/AuthService';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 
 const LoginForm = () => {
   const [reChaptChaStatus,setReChaptChaStatus]=useState(false);
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
+  const router = useRouter();
   const form = useForm({
     resolver:zodResolver(loginSchema)
   });
@@ -34,7 +39,12 @@ const onSubmit:SubmitHandler<FieldValues> =async(data)=>{
 try {
   const res = await loginUser(data);
 if(res?.success){
-  toast.success(res.message)
+  toast.success(res.message);
+  if (redirect) {
+    router.push(redirect);
+  } else {
+    router.push("/profile");
+  }
 }else{
   toast.error(res.message)
 }
