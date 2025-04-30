@@ -3,7 +3,7 @@ import React from 'react';
 
 const CreateShopPage = () => {
   return (
-    <div>
+    <div className='flex items-center justify-center'>
      <CreateShopForm/>
     </div>
   );
